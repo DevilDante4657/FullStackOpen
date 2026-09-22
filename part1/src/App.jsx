@@ -1,64 +1,44 @@
 import { useState } from 'react'
 
-const Statistics = (props) => {
-  return(
-    <tr>
-      <td>{props.title}</td>
-      <td>{props.stat}</td> 
-    </tr>
-  )
-}
-
-const Button = (props) => {
-  return(
-    <button onClick={props.handle}>{props.text}</button>
-  )
-}
-
 const App = () => {
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
+  const anecdotes = [
+    'If it hurts, do it more often.',
+    'Adding manpower to a late software project makes it later!',
+    'The first 90 percent of the code accounts for the first 90 percent of the development time...The remaining 10 percent of the code accounts for the other 90 percent of the development time.',
+    'Any fool can write code that a computer can understand. Good programmers write code that humans can understand.',
+    'Premature optimization is the root of all evil.',
+    'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.',
+    'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
+    'The only way to go fast, is to go well.'
+  ]
 
-  const handleGood = () => setGood(good + 1)
-  const handleNeutral = () => setNeutral(neutral + 1)
-  const handleBad = () => setBad(bad + 1)
+  const [selected, setSelected] = useState(0)
+  const [votes, setVotes] = useState(() => new Array(anecdotes.length).fill(0))
 
-  let Total = good + neutral + bad
-  let Average = (good - bad)/Total
-  let Positive = (good * 100)/Total
-
-  console.log(good, neutral, bad)
-
-  if (good == 0 && neutral == 0 && bad == 0){
-    return(
-      <>
-        <h1>Give Feedback</h1>
-        <Button handle = {handleGood} text = "Good"/>
-        <Button handle = {handleNeutral} text = "Neutral"/>
-        <Button handle = {handleBad} text = "Bad"/>
-        <h1>Statistics</h1>
-        <div>No Feedback Givesdsdn</div>
-      </>
-    )
+  const handleVote = () => {
+    const updatedVotes = [...votes]
+    updatedVotes[selected] += 1
+    setVotes(updatedVotes)
   }
+
+  const handleSelector = () => {
+    const randomNumber = Math.floor(Math.random() * anecdotes.length)
+    setSelected(randomNumber)
+  }
+
+  const mostVotedAncedote = votes.indexOf(Math.max(...votes))
+
+  console.log(mostVotedAncedote)
   return (
-    <>
-      <h1>Give Feedback</h1>
-      <Button handle = {handleGood} text = "Good"/>
-      <Button handle = {handleNeutral} text = "Neutral"/>
-      <Button handle = {handleBad} text = "Bad"/>
-      <h1>Statistics</h1>
-      <table>
-      <Statistics title = "Good" stat = {good}/> 
-      <Statistics title = "Neutral" stat = {neutral}/>
-      <Statistics title = "Bad" stat = {bad}/>
-      <Statistics title = "Total" stat = {Total}/>
-      <Statistics title = "Average" stat = {Average}/>
-      <Statistics title = "Positive" stat = {Positive}/>
-      </table>
-    </>
-  
+    <div>
+      <h1>Anecdote of the day</h1>
+      <p>{anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
+      <button onClick={handleVote}>vote</button>
+      <button onClick={handleSelector}>Next Anecdote</button>
+      <h1>Anecdote with the most votes</h1>
+      <p>{anecdotes[mostVotedAncedote]}</p>
+    </div>
   )
 }
 

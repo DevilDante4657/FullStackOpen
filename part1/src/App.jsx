@@ -1,62 +1,64 @@
+import { useState } from 'react'
+
+const Statistics = (props) => {
+  return(
+    <tr>
+      <td>{props.title}</td>
+      <td>{props.stat}</td> 
+    </tr>
+  )
+}
+
+const Button = (props) => {
+  return(
+    <button onClick={props.handle}>{props.text}</button>
+  )
+}
+
 const App = () => {
-  const course = {
-      name :'Half Stack application development',
-      parts : [
-    {
-      name: 'Fundamentals of React',
-      exercises: 10
-    },
-    {
-      name: 'Using props to pass data',
-      exercises: 7
-    },
-    {
-      name: 'State of a component',
-      exercises: 14
-    }
-  ]
-}
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
 
-  return (
-    <div>
-      <Header course={course} />
-      <Content parts={course.parts} />
-      <Total parts={course.parts} />
-    </div>
-  )
-}
+  const handleGood = () => setGood(good + 1)
+  const handleNeutral = () => setNeutral(neutral + 1)
+  const handleBad = () => setBad(bad + 1)
 
-const Header = (props) => {
-  return (
-    <h1>{props.course.name}</h1>
-  )
-}
+  let Total = good + neutral + bad
+  let Average = (good - bad)/Total
+  let Positive = (good * 100)/Total
 
-const Content = (props) => {
-  return (
-    <div>
-      <Part part={props.parts[0]} />
-      <Part part={props.parts[1]} />
-      <Part part={props.parts[2]} />
-    </div>
-  )
-}
+  console.log(good, neutral, bad)
 
-const Part = (props) => {
+  if (good == 0 && neutral == 0 && bad == 0){
+    return(
+      <>
+        <h1>Give Feedback</h1>
+        <Button handle = {handleGood} text = "Good"/>
+        <Button handle = {handleNeutral} text = "Neutral"/>
+        <Button handle = {handleBad} text = "Bad"/>
+        <h1>Statistics</h1>
+        <div>No Feedback Givesdsdn</div>
+      </>
+    )
+  }
   return (
-    <div>
-      <p>{props.part.name} {props.part.exercises}</p>
-    </div>
-  )
-}
-
-const Total = (props) => {
-  return (
-    <div>
-      <p>
-        Number of exercises {props.parts[0].exercises + props.parts[1].exercises + props.parts[2].exercises}
-      </p>
-    </div>
+    <>
+      <h1>Give Feedback</h1>
+      <Button handle = {handleGood} text = "Good"/>
+      <Button handle = {handleNeutral} text = "Neutral"/>
+      <Button handle = {handleBad} text = "Bad"/>
+      <h1>Statistics</h1>
+      <table>
+      <Statistics title = "Good" stat = {good}/> 
+      <Statistics title = "Neutral" stat = {neutral}/>
+      <Statistics title = "Bad" stat = {bad}/>
+      <Statistics title = "Total" stat = {Total}/>
+      <Statistics title = "Average" stat = {Average}/>
+      <Statistics title = "Positive" stat = {Positive}/>
+      </table>
+    </>
+  
   )
 }
 
